@@ -1,0 +1,12 @@
+Próxima aula
+17/10
+
+* Finalizar templates EJS
+* Sequelize - ORM Database
+* NoSQL - MongoDB
+
+* Clean -> JWT / Upload de arquivos / testes ** / deploy
+
+Atividade -> criar ou evoluir uma API
+
+Iniicar uma API juntos e vocês finalizarem -> Entregar como atividade final.
