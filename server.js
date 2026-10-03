@@ -1,62 +1,40 @@
-//Criar um servidor básico
+//Utilizar o express
 /**
- * Essa branch mostra um SERVIDOR PURO sem EXPRESS + CRUD com SQL "puro"
- * 
- * Demonstração didática desses módulos nativos
- * desafios e importancia de manter um código não CLEAN em que mistura:
- * Servidor, bando de dados, roteamento... TUDO junto!
- * 
- * CRUD simples de alunos de uma escola
- * 
- * Receber e enviar os dados JSON -> function que pega os dados e converte em JSON
- * Devolve os dados em formato JSON
- * 
+ * Resolver problemas de criação de ROTA com Ifs....
+ * Tratamento JSON
+ * Roteamento (Router)
+ * Paramêtros nativos (não preciso fazer IF para "pegar params") => req.params
+ * Começar a separar as responsabilidades => Controller e Routes
+ * Tratamento de erro centralizado!
  */
+//Padrão CommomJS
 
-const http = require("http");
-const fs = require('fs');
-const db = require('./db')
-//Tranformar buffer => string => JSON
+const express = require('express')
+const app = express();
+const PORT = 3000;
 
+//rotas
+const alunosRoutes = require('./routes/alunos.routes')
+//resolvendo o PARSE JSON - middlewares globais
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
+//Nossas rotas
 
-const getRequestBoby = (req) => {
-    //Devolver a requisição em forma JSON
+//Usar roteamento (ROUTER)
 
-    return new Promise((resolve, reject) => {
-        const chunks = [];
-        //pegar o stream de dados da req
-        req.on('data', (chunk) => {
-            chunks.push(chunk)
-        })
-        //processar os dados da requisição
-        req.on('end', () => {
-            //Sem nada!
-            if (chunks.length === 0) {
-                resolve({})
-            }
-            try {
-                const rawData = Buffer.concat(chunks).toString();
-                const parseToJson = JSON.parse(rawData)
-                resolve(parseToJson)
-            }
-            catch (error) {
-                reject(new Error("Formato de JSON inválido"))
-            }
-        })
-        req.on('error', (err) => {
-            reject(err)
-        })
-    })
-}
+app.use('/alunos', alunosRoutes)
 
-//Clean
-const sendJson = (res, statusCode, data) => {
-    res.writeHead(statusCode, { 'Content-Type': 'application/json;charset=utf-8' })
-    res.end(JSON.stringify(data))
-}
+//Middleware global - sempre no final.
+app.use((req, res) => {
+    res.status(404).json({ messagem: "Rota não encontrada..." })
+})
 
-
+//Inicia o servidor
+app.listen(PORT, () => {
+    console.log(`Servidor na porta ${PORT}`)
+})
+/* 
 
 const server = http.createServer(async (req, res) => {
 
@@ -181,3 +159,4 @@ const server = http.createServer(async (req, res) => {
 //publicar o meu server!
 
 server.listen(3000);
+ */
