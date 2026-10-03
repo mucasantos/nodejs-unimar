@@ -99,6 +99,109 @@ const server = http.createServer(async (req, res) => {
 
     //Atividade 01 -> Criar as outras rotas
 
+    if (req.url === '/alunos' && req.method === 'POST') {
+        try {
+            const body = await getRequestBoby(req)
+
+            if (!body.nome || !body.email) {
+                return sendJson(res, 400, {
+                    message: 'Nome e email são obrigatórios'
+                })
+            }
+
+            const [result] = await db.query(
+                'INSERT INTO alunos (nome, email) VALUES (?, ?)',
+                [body.nome, body.email]
+            )
+
+            return sendJson(res, 201, {
+                message: 'Aluno cadastrado com sucesso',
+                id: result.insertId
+            })
+
+        } catch (error) {
+
+            return sendJson(res, 400, {
+                message: error.message
+            })
+        }
+    }
+
+    if ((req.url).startsWith('/alunos/') && req.method === 'PUT') {
+        const id = (req.url).split('/')[2]
+
+        if (!id || isNaN(id)) {
+            return sendJson(res, 400, {
+                message: 'ID inválido!'
+            })
+        }
+
+        try {
+
+            const body = await getRequestBoby(req)
+
+            if (!body.nome || !body.email) {
+                return sendJson(res, 400, {
+                    message: 'Nome e email são obrigatórios'
+                })
+            }
+
+            const [result] = await db.query(
+                'UPDATE alunos SET nome = ?, email = ? WHERE id = ?',
+                [body.nome, body.email, id]
+            )
+
+            if (result.affectedRows === 0) {
+                return sendJson(res, 404, {
+                    message: 'Aluno não encontrado'
+                })
+            }
+
+            return sendJson(res, 200, {
+                message: 'Aluno atualizado com sucesso'
+            })
+
+        } catch (error) {
+
+            return sendJson(res, 400, {
+                message: error.message
+            })
+        }
+    }
+
+    if ((req.url).startsWith('/alunos/') && req.method === 'DELETE') {
+        const id = (req.url).split('/')[2]
+
+        if (!id || isNaN(id)) {
+            return sendJson(res, 400, {
+                message: 'ID inválido!'
+            })
+        }
+
+        try {
+            const [result] = await db.query('DELETE FROM alunos WHERE id = ?',[id])
+
+            if (result.affectedRows === 0) {
+                return sendJson(res, 404, {
+                    message: 'Aluno não encontrado'
+                })
+            }
+
+            return sendJson(res, 200, {
+                message: 'Aluno removido com sucesso'
+            })
+
+        } catch (error) {
+
+            return sendJson(res, 500, {
+                message: error.message
+            })
+        }
+    }
+
+    return sendJson(res, 404, {
+        message: 'Rota não encontrada'
+    })
 })
 
 //publicar o meu server!
