@@ -1,1 +1,1 @@
-"message: estou enviando dados - Mais uma mensagem!"
+{"message":"message: estou enviando dados - Mais uma mensagem!"}
