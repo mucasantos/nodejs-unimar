@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-unimar",
+  "version": "1.0.0",
+  "description": "Aula de NodeJs Unimar 2026 - Pós FullStack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mucasantos/nodejs-unimar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mucasantos/nodejs-unimar/issues"
+  },
+  "homepage": "https://github.com/mucasantos/nodejs-unimar#readme",
+  "dependencies": {
+    "mysql2": "^3.24.5"
+  }
+}
