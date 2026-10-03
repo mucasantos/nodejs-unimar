@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-unimar-2026",
+  "version": "1.0.0",
+  "description": "Aula de NodeJS Unimar 2026 - Pós FullStack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samuel Santos e alunos",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
