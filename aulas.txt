@@ -6,6 +6,7 @@ mobile -> React Native
 NodeJS
 
 - Básico - teórico
+    Core Modules: http, fs, path, os *
 - Construção de uma API - hands on (fazer mesmo)
 - Express -> frame para agilizar o desenvolvimento
 - Auth(JWT), middlewares...
