@@ -1,14 +1,12 @@
 const db = require('../db')
 
-const listarAlunos = async (req, res, next) => {
+const listarAlunos = async (req, res) => {
     try {
-        const [alunos] = await db.query('SELECT * FROM alunos ORDER BY id DESC')
-        return res.render('../views/alunos/index', { 
-            alunos: alunos,
-            titulo: 'Lista de Alunos'
-        })
+        const [rows] = await db.query('SELECT * FROM alunos ORDER BY id DESC')
+        return res.status(200).json(rows)
     } catch (error) {
-       next(error)
+        console.error(error)
+        return res.status(500).json({ mensagem: 'Erro interno', detalhe: error.message })
     }
 }
 
