@@ -59,47 +59,114 @@ const sendJson = (res, statusCode, data) => {
 
 
 const server = http.createServer(async (req, res) => {
-
-    //Pequena doc das rotas
-
-    if (req.url === '/' && req.method === 'GET') {
-        return sendJson(res, 200, {
-            mensagem: 'API de alunos - Node.js HTTP puro + MySql',
-            rotas: [
-                { metodo: 'GET', url: '/alunos', descricao: 'Rota que devolve os alunos' },
-                { metodo: 'GET', url: '/alunos:/id', descricao: 'Rota que devolve aluno por ID' },
-                { metodo: 'POST', url: '/alunos', descricao: 'Cadastra aluno' },
-                { metodo: 'PUT', url: '/alunos:/:id', descricao: 'Atualiza aluno pelo ID' },
-                { metodo: 'DELETE', url: '/alunos/:id', descricao: 'Remove pelo ID' }
-
-            ]
-        })
-    }
-
-    if (req.url === '/alunos' && req.method === 'GET') {
-        const [rows] = await db.query('SELECT * FROM alunos ORDER by id DESC')
-        return sendJson(res, 200, rows)
-    }
-
-        //Criar as rotas CRUD
-
-    if ((req.url).startsWith('/alunos/') && req.method === 'GET') {
-        const id = (req.url).split('/')[2]
-        //Recurso => acesso ao DB, consumo de memória... 
-        if (!id || isNaN(id)) {
-            return sendJson(res, 404, { message: "ID inválido!" })
+    try {
+        // Documentação das rotas
+        if (req.url === '/' && req.method === 'GET') {
+            return sendJson(res, 200, {
+                mensagem: 'API de alunos - Node.js HTTP puro + MySql',
+                rotas: [
+                    { metodo: 'GET', url: '/alunos', descricao: 'Rota que devolve os alunos' },
+                    { metodo: 'GET', url: '/alunos/:id', descricao: 'Rota que devolve aluno por ID' },
+                    { metodo: 'POST', url: '/alunos', descricao: 'Cadastra aluno' },
+                    { metodo: 'PUT', url: '/alunos/:id', descricao: 'Atualiza aluno pelo ID' },
+                    { metodo: 'DELETE', url: '/alunos/:id', descricao: 'Remove pelo ID' }
+                ]
+            });
         }
-        const [rows] = await db.query('SELECT * FROM alunos WHERE id = ?', [id])
 
-        if (rows.length === 0) {
-            return sendJson(res, 404, { message: "Aluno não encontrado" })
+        // Listar todos os alunos (Usa idalunos no ORDER BY)
+        if (req.url === '/alunos' && req.method === 'GET') {
+            const [rows] = await db.query('SELECT * FROM alunos ORDER BY idalunos DESC');
+            return sendJson(res, 200, rows);
         }
-        return sendJson(res, 200, rows)
+
+        // Buscar aluno por ID (Usa idalunos na clausula WHERE)
+        if (req.url.startsWith('/alunos/') && req.method === 'GET') {
+            const id = req.url.split('/')[2];
+            if (!id || isNaN(id)) {
+                return sendJson(res, 400, { message: "ID inválido!" });
+            }
+            const [rows] = await db.query('SELECT * FROM alunos WHERE idalunos = ?', [id]);
+
+            if (rows.length === 0) {
+                return sendJson(res, 404, { message: "Aluno não encontrado" });
+            }
+            return sendJson(res, 200, rows[0]);
+        }
+
+        // 1. CADASTRAR ALUNO (POST)
+        if (req.url === '/alunos' && req.method === 'POST') {
+            const body = await getRequestBoby(req);
+            const { nome } = body;
+
+            if (!nome) {
+                return sendJson(res, 400, { message: "O campo 'nome' é obrigatório" });
+            }
+
+            const [result] = await db.query(
+                'INSERT INTO alunos (nome) VALUES (?)',
+                [nome]
+            );
+
+            return sendJson(res, 201, {
+                message: "Aluno cadastrado com sucesso",
+                idalunos: result.insertId,
+                nome
+            });
+        }
+
+        // 2. ATUALIZAR ALUNO POR ID (PUT)
+        if (req.url.startsWith('/alunos/') && req.method === 'PUT') {
+            const id = req.url.split('/')[2];
+
+            if (!id || isNaN(id)) {
+                return sendJson(res, 400, { message: "ID inválido!" });
+            }
+
+            const body = await getRequestBoby(req);
+            const { nome } = body;
+
+            if (!nome) {
+                return sendJson(res, 400, { message: "O campo 'nome' é obrigatório" });
+            }
+
+            const [result] = await db.query(
+                'UPDATE alunos SET nome = ? WHERE idalunos = ?',
+                [nome, id]
+            );
+
+            if (result.affectedRows === 0) {
+                return sendJson(res, 404, { message: "Aluno não encontrado para atualização" });
+            }
+
+            return sendJson(res, 200, { message: "Aluno atualizado com sucesso", idalunos: id, nome });
+        }
+
+        // 3. DELETAR ALUNO POR ID (DELETE)
+        if (req.url.startsWith('/alunos/') && req.method === 'DELETE') {
+            const id = req.url.split('/')[2];
+
+            if (!id || isNaN(id)) {
+                return sendJson(res, 400, { message: "ID inválido!" });
+            }
+
+            const [result] = await db.query('DELETE FROM alunos WHERE idalunos = ?', [id]);
+
+            if (result.affectedRows === 0) {
+                return sendJson(res, 404, { message: "Aluno não encontrado para remoção" });
+            }
+
+            return sendJson(res, 200, { message: "Aluno removido com sucesso" });
+        }
+
+        // Fallback para rota não encontrada
+        return sendJson(res, 404, { message: "Rota não encontrada" });
+
+    } catch (error) {
+        console.error("Erro interno:", error);
+        return sendJson(res, 500, { message: "Erro interno no servidor", details: error.message });
     }
-
-    //Atividade 01 -> Criar as outras rotas
-
-})
+});
 
 //publicar o meu server!
 
