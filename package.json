@@ -9,6 +9,7 @@
   "author": "Samuel Santos e alunos",
   "license": "ISC",
   "dependencies": {
+    "mysql2": "^3.24.5",
     "nodemon": "^3.1.14"
   }
 }
