@@ -1,16 +1,11 @@
 //Controller para API rest
 const db = require('../db')
 
-const listarAlunos = async (req, res, next) => {
+const listarAlunos = async (req, res) => {
     try {
-        const [alunos] = await db.query('SELECT * FROM alunos ORDER by id DESC')
-        return res.render('alunos/index', {
-            alunos: alunos,
-            titulo: "Lista de alunos"
-        })
+        const [rows] = await db.query('SELECT * FROM alunos ORDER by id DESC')
+        return res.status(200).json(rows)
     } catch (error) {
-        console.log("?")
-        next(error) // preciso encaminhar o erro para poder resolver no middleware
     }
 }
 

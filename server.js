@@ -9,22 +9,32 @@
  */
 //Padrão CommomJS
 const express = require('express')
+const alunosRoutes = require('./routes/alunos.routes')
+const path = require('path')
 const app = express();
 const PORT = 3000;
 
-//rotas
-const alunosRoutes = require('./routes/alunos.routes')
+//Configurar o motor de templates (EJS) - tem pug, por exemplo
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+
 //resolvendo o PARSE JSON - middlewares globais
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.use(express.static(path.join(__dirname, 'public')))
+
 //Nossas rotas
-//Usar roteamento (ROUTER)
 app.use('/alunos', alunosRoutes)
 
 //Middleware global - sempre no final.
 app.use((req, res) => {
     res.status(404).json({ messagem: "Rota não encontrada..." })
+})
+
+app.use((error, req, res, next) => {
+    console.log(error)
+    res.status(500).json({ messagem: error })
 })
 
 //Inicia o servidor
