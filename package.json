@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mucasantos/nodejs-unimar#readme",
   "dependencies": {
+    "express": "^5.2.1",
     "mysql2": "^3.24.5"
   }
 }
