@@ -1,14 +1,23 @@
 //Iniciar o express e servir as rotas
 const express = require('express')
-//routes
-const routes = require('./routes')
+const path = require('path')
+//routes upload
+const uploadRoutes = require('./routes/upload.routes')
+
 
 const app = express()
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+app.use(express.static(path.join(__dirname, '..', 'public')))
+
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
+
 
 //Rotas Api
-app.use('/api', routes)
+
+app.use('/api/upload', uploadRoutes)
 
 //404
 
