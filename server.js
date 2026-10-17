@@ -10,7 +10,7 @@ async function startServer() {
         await sequelize.authenticate()
 
         //Sincronizar tables
-        await sequelize.sync({ alter: true })
+        await sequelize.sync()  //({ alter: true }) -> força a atualizacao de tables
 
         app.listen(3000, () => {
             console.log('Servidor no ar!')

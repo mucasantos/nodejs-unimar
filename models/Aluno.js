@@ -14,11 +14,13 @@ const Aluno = sequelize.define('Aluno', {
     },
     email: {
         type: DataTypes.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     matricula: {
         type: DataTypes.STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
 
     //Modelo atual, salvamos o nome do curso (modelo RUIM!!)
