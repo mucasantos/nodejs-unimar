@@ -16,6 +16,10 @@ const renderListaAlunos = async (req, res) => {
     }
 }
 
+const renderNovoAluno = (req, res) => {
+    return res.render('alunos/form')
+}
+
 const buscarAlunoByID = async (req, res) => {
     const { id } = req.params //Vem do express!
     //Recurso => acesso ao DB, consumo de memória... 
@@ -37,11 +41,8 @@ const criarAluno = async (req, res) => {
         return res.status(400).json({ messagem: "Campos obrigatórios: nome, email, matricula, curso" })
     }
     const [result] = await db.query("INSERT INTO alunos (nome, email, matricula, curso) VALUES (?, ?, ?,?)", [nome, email, matricula, curso])
-    return res.status(201).json({
-        mensagem: "Aluno inserido com sucesso",
-        id: result.insertId,
-        aluno: { id: result.insertId, nome, email, matricula, curso }
-    })
+    return res.redirect('/alunos')
+
 }
 
 const atualizarAluno = async (req, res) => {
@@ -87,6 +88,7 @@ const apagarAluno = async (req, res, next) => {
 
 module.exports = {
     renderListaAlunos,
+    renderNovoAluno,
     buscarAlunoByID,
     criarAluno,
     atualizarAluno,

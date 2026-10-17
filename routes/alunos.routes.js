@@ -10,7 +10,9 @@ const alunosControllers = require('../controllers/alunos.controllers.views')
 
 router.get('/', alunosControllers.renderListaAlunos)
 router.post('/excluir/:id', alunosControllers.apagarAluno)
+router.get('/novo', alunosControllers.renderNovoAluno)
 
+router.post('/', alunosControllers.criarAluno)
 
 
 /*

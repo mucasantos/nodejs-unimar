@@ -1,0 +1,22 @@
+<%- include('../includes/head.ejs') %>
+
+    <form action="/alunos" method="post">
+        <div class="form-group">
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" name="nome">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email">
+        </div>
+        <div class="form-group">
+            <label for="matricula">Matricula</label>
+            <input type="text" id="matricula" name="matricula">
+        </div>
+        <div class="form-group">
+            <label for="curso">Curso</label>
+            <input type="text" id="curso" name="curso">
+        </div>
+
+        <button type="submit">Salvar Aluno</button>
+    </form>
