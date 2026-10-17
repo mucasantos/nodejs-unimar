@@ -6,7 +6,7 @@ const crypto = require('crypto')
 
 //garantir q  pasta uploads exista!!
 
-const uploadDir = path.resolve(__dirname, '..', '..', 'uploads')
+const uploadDir = path.resolve(__dirname, '..', 'uploads')
 
 if (!fs.existsSync(uploadDir)) {
 
