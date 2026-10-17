@@ -1,43 +1,25 @@
-//Utilizar o express
-/**
- * Resolver problemas de criação de ROTA com Ifs....
- * Tratamento JSON
- * Roteamento (Router)
- * Paramêtros nativos (não preciso fazer IF para "pegar params") => req.params
- * Começar a separar as responsabilidades => Controller e Routes
- * Tratamento de erro centralizado!
- */
-//Padrão CommomJS
-const express = require('express')
-const path = require('path')
-const app = express();
-const PORT = 3000;
+// Server -> conecta / autentica o banco e cria o server
 
-//rotas
-const alunosRoutes = require('./routes/alunos.routes')
+const app = require('./app')
+const { sequelize } = require('./models')
 
-//Motor VIEW - EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
+async function startServer() {
 
+    try {
+        console.log("Conectar com DB")
+        await sequelize.authenticate()
 
-//resolvendo o PARSE JSON - middlewares globais
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+        //Sincronizar tables
+        await sequelize.sync({ alter: true })
 
-//Permitir acesso a pasta public na raiz do projeto
-app.use(express.static(path.join(__dirname, 'public')))
+        app.listen(3000, () => {
+            console.log('Servidor no ar!')
+        })
+    } catch (error) {
+        console.log('Erro ao iniciar SERVER!')
+        console.log(error)
 
-//Nossas rotas
-//Usar roteamento (ROUTER)
-app.use('/alunos', alunosRoutes)
+    }
+}
 
-//Middleware global - sempre no final.
-app.use((req, res) => {
-    res.status(404).json({ messagem: "Rota não encontrada..." })
-})
-
-//Inicia o servidor
-app.listen(PORT, () => {
-    console.log(`Servidor na porta ${PORT}`)
-})
+startServer()
