@@ -1,25 +1,13 @@
-//Gerenciar as rotas da aplicacao
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/alunos.controller');
 
-//A responsabilidade desse arquivo, é conhecer rotas!!
-//Ele não precisa conhever lógica de negócio (controllers)
+// Rotas Web (Server-Side Rendering com EJS)
+router.get('/', controller.renderListarAlunos);
+router.get('/novo', controller.renderNovoAluno);
+router.post('/', controller.criarAluno);
+router.get('/editar/:id', controller.renderEditarAluno);
+router.post('/editar/:id', controller.atualizarAluno);
+router.post('/excluir/:id', controller.excluirAluno);
 
-const express = require('express')
-const router = express.Router()
-const alunosControllers = require('../controllers/alunos.controllers.views')
-
-
-router.get('/', alunosControllers.renderListaAlunos)
-router.post('/excluir/:id', alunosControllers.apagarAluno)
-router.get('/novo', alunosControllers.renderNovoAluno)
-
-router.post('/', alunosControllers.criarAluno)
-
-
-/*
-router.get('/', alunosControllers.listarAlunos)
-router.get('/:id', alunosControllers.buscarAlunoByID)
-router.post('/', alunosControllers.criarAluno)
-router.put('/:id', alunosControllers.atualizarAluno)
-router.delete('/:id', alunosControllers.apagarAluno)
-*/
 module.exports = router;
