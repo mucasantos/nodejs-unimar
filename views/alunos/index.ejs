@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View EJS - Alunos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <% if (alunos.length===0) { %>
+        <div class="empty-state">
+            <p>Nenhum aluno cadastrado</p>
+        </div>
+        <% } else { %>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>ID</tr>
+                        <tr>Nome</tr>
+                    </thead>
+                    <tbody>
+                        <% alunos.forEach(aluno=> { %>
+                            <tr>
+                                <td>
+                                    <%= aluno.id %>
+                                </td>
+                                <td>
+                                    <%= aluno.nome %>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <form action="/alunos/excluir/<%= aluno.id %>" method="POST">
+                                            <button type="submit">Excluir</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+
+            </div>
+            <% } %>
+
+                <h1>Render Alunos</h1>
+</body>
+
+</html>

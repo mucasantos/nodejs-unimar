@@ -9,14 +9,24 @@
  */
 //Padrão CommomJS
 const express = require('express')
+const path = require('path')
 const app = express();
 const PORT = 3000;
 
 //rotas
 const alunosRoutes = require('./routes/alunos.routes')
+
+//Motor VIEW - EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+
+
 //resolvendo o PARSE JSON - middlewares globais
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+//Permitir acesso a pasta public na raiz do projeto
+app.use(express.static(path.join(__dirname, 'public')))
 
 //Nossas rotas
 //Usar roteamento (ROUTER)

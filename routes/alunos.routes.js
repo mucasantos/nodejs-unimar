@@ -5,12 +5,19 @@
 
 const express = require('express')
 const router = express.Router()
-const alunosControllers = require('../controllers/alunos.controllers')
+const alunosControllers = require('../controllers/alunos.controllers.views')
 
+
+router.get('/', alunosControllers.renderListaAlunos)
+router.post('/excluir/:id', alunosControllers.apagarAluno)
+
+
+
+/*
 router.get('/', alunosControllers.listarAlunos)
 router.get('/:id', alunosControllers.buscarAlunoByID)
 router.post('/', alunosControllers.criarAluno)
 router.put('/:id', alunosControllers.atualizarAluno)
 router.delete('/:id', alunosControllers.apagarAluno)
-
+*/
 module.exports = router;

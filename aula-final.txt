@@ -1,0 +1,11 @@
+
+VIEW -> Como configurar NodeJS pra servir uma VIEW
+    Usando o EJS - https://ejs.co/docs/
+
+Express -> ORM (Sequelize / Mongoose)
+
+JWT -> auth
+
+Clean arch -> Separar algumas camadas
+
+Projeto final -> Fazer esqueleto -> Atividade será finalizar

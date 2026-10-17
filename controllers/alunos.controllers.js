@@ -1,4 +1,7 @@
-
+/**
+ * Controller quer retorna os dados via JSON
+ * 
+ */
 
 const db = require('../db')
 
